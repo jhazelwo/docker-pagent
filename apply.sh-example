@@ -1,0 +1,20 @@
+#!/bin/sh
+
+modu="/mnt/puppet-couchbase/"
+mani="${modu}couchbase/manifests/"
+yaml="${modu}couchbase/yaml/"
+
+for this in `find ${mani} -type f -name \*.pp`; do
+  /usr/bin/puppet-lint --with-filename $this
+done
+
+ln -sfv ${yaml}hiera.yaml /etc/puppetlabs/code/environments/production/hieradata/common.yaml
+
+puppet="/opt/puppetlabs/puppet/bin/puppet"
+#noop="--noop"
+#debug="--debug"
+modpath="--modulepath=/etc/puppetlabs/code/environments/production/modules:${modu}"
+hiera="--hiera_config=${yaml}hiera.yaml"
+$puppet apply $hiera $debug $noop $modpath -e "include couchbase"
+
+
