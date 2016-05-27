@@ -5,4 +5,3 @@ modules="-v /media/sf_GitHub:/mnt"
 remove="--rm=true"
 docker run $name $remove -ti $modules $image /bin/bash
 
-
